@@ -8,6 +8,7 @@ public class Runner : MonoBehaviour, iSyncable {
     public TuringScene scene;
 	private float speed;
     private Vector3 goalPosition;
+    private Vector3 previousPosition;
     
     // Use this for initialization
 	void updateSpeed () {
@@ -16,12 +17,15 @@ public class Runner : MonoBehaviour, iSyncable {
     
     void Start(){
         registerAsSyncObject();
-        goalPosition = transform.position; 
+        goalPosition = transform.position;
+        previousPosition = transform.position; 
     }
     
     public void onSync(){
         updateSpeed();
         //rotate and shit
+        transform.position = goalPosition;
+        previousPosition = goalPosition;
         goalPosition += transform.forward;
     }
     
@@ -36,6 +40,7 @@ public class Runner : MonoBehaviour, iSyncable {
     }
 	// Update is called once per frame
 	void Update () {
-	   transform.position += (transform.position - goalPosition)*speed*Time.deltaTime;
+       Debug.Log("Speed: " + speed.ToString() +" Goal Position: " + goalPosition.ToString() ); 
+	   transform.position += (goalPosition-previousPosition)*speed*Time.deltaTime;
 	}
 }

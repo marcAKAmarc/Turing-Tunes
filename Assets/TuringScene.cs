@@ -22,6 +22,7 @@ public class TuringScene:MonoBehaviour {
         while (true){
             yield return new WaitForSeconds(syncer.Interval);
             syncer.updateSyncObjects();
+            GetComponent<AudioSource>().Play();
         }
     }
 }
