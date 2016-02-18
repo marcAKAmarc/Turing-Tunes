@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scene.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\Games\Dwarf Fortress\readme.txt">
     <Files>
-      <File FileName="Assets\Scene.cs" Line="1" Column="1" />
+      <File FileName="..\..\..\..\Games\Dwarf Fortress\readme.txt" Line="1" Column="1" />
+      <File FileName="Assets\Materials\alphaShader.shader" Line="2" Column="4" />
       <File FileName="Assets\Syncer.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
