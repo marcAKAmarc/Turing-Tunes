@@ -53,7 +53,7 @@ public class PagodaController : Syncable {
         ).ToList();
         
         var rotateCounterClockwise = 0;
-        foreach(Runner runner in positionedRunners){
+        foreach(Runner runner in positionedRunners.Where (x=>x.getGoalPosition().snap() != x.transform.position.snap ())){
             bool inPagoda = base.getScene().Pagodas.Where(p=>p.transform.position.snap() == runner.transform.position.snap()).ToList().Count > 0;
             if(inPagoda)
                 break;

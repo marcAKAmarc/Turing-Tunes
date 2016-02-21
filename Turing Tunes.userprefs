@@ -1,14 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Runner.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="C:\Users\luckynoface\Desktop\GitHubLog.txt">
     <Files>
-      <File FileName="Assets\iSyncable.cs" Line="5" Column="1" />
-      <File FileName="Assets\PagodaController.cs" Line="79" Column="20" />
-      <File FileName="Assets\Spawner.cs" Line="18" Column="1" />
-      <File FileName="Assets\SharedImplementation.cs" Line="4" Column="41" />
-      <File FileName="Assets\Runner.cs" Line="16" Column="1" />
-      <File FileName="Assets\Syncer.cs" Line="27" Column="1" />
-      <File FileName="Assets\MouseController.cs" Line="134" Column="15" />
+      <File FileName="C:\Users\luckynoface\Desktop\GitHubLog.txt" Line="1" Column="1" />
+      <File FileName="Assets\iSyncable.cs" Line="1" Column="1" />
+      <File FileName="Assets\PagodaController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Spawner.cs" Line="1" Column="1" />
+      <File FileName="Assets\SharedImplementation.cs" Line="1" Column="1" />
+      <File FileName="Assets\Runner.cs" Line="1" Column="1" />
+      <File FileName="Assets\Syncer.cs" Line="1" Column="1" />
+      <File FileName="Assets\MouseController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
