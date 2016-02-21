@@ -52,6 +52,7 @@
      <Compile Include="Assets\MouseController.cs" />
      <Compile Include="Assets\PagodaController.cs" />
      <Compile Include="Assets\Runner.cs" />
+     <Compile Include="Assets\SharedImplementation.cs" />
      <Compile Include="Assets\Spawner.cs" />
      <Compile Include="Assets\Syncer.cs" />
      <Compile Include="Assets\TuringScene.cs" />

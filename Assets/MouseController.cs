@@ -131,7 +131,7 @@ public class MouseController : MonoBehaviour {
         var syncobjs = scene.syncer.findSyncObjectsByPosition(transform.position.snap());
         bool deleted = syncobjs.Count > 0;
         foreach(var syncobj in syncobjs){
-            scene.removeSyncObject(syncobj);
+            //scene.removeSyncObject(syncobj);
             Destroy(syncobj.getGameObject());
         }
         return deleted;   

@@ -4,12 +4,8 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Runner : MonoBehaviour, iSyncable {
-    private Guid id;
-    [SerializeField]
-    
-    private Guid? OwnerId = null;
-    public TuringScene scene;
+public class Runner : Syncable {
+
 	private float speed;
     private Vector3 goalPosition;
     private Vector3 previousPosition;
@@ -17,33 +13,30 @@ public class Runner : MonoBehaviour, iSyncable {
     private Guid? BlockedBy;
     private int TicksBlocked=0;
     private int TicksBlockedByBlockedBy=0; 
-    private DateTime TimeCreated;
+
     
     // Use this for initialization
-	void updateSpeed () {
-	   speed = 1.0f/scene.syncer.Interval;
+	private void updateSpeed () {
+	   speed = 1.0f/base.getScene().syncer.Interval;
 	}
     
-    void Start(){
-        TimeCreated = DateTime.Now;
-        registerAsSyncObject();
-        registerToScene();
+    protected override void Start(){
+		base.Start ();
+		registerToScene();
         goalPosition = transform.position;
         previousPosition = transform.position; 
     }
     
-    void OnDestroy(){
-        scene.removeSyncObject((iSyncable)this);
-    }
+
     
-    public void onSync(){
+    public override void onSync(){
         updateSpeed();
         transform.position = goalPosition.snap();
         handlePagodaRotation();
         goalPosition = (transform.position+transform.forward).snap();
     }
     
-    public void onPostSync(){
+    public override void onPostSync(){
         //check positions
         if(!checkPositionFree(goalPosition)){
             goalPosition =transform.position.snap();
@@ -51,15 +44,14 @@ public class Runner : MonoBehaviour, iSyncable {
         previousPosition = transform.position.snap();
     }
     
-    public void onSyncRelease(){
+    public override void onSyncRelease(){
 		if(goalPosition.snap () == transform.position.snap ())
 			TicksBlocked += 1;
 		else
 			TicksBlocked = 0;
 
         if(TicksBlockedByBlockedBy>FightThreshold){
-            //scene.removeSyncObject((iSyncable)this);
-            var other = scene.syncer.findSyncObjectsById((Guid)BlockedBy);
+            var other = base.getScene().syncer.findSyncObjectsById((Guid)BlockedBy);
             if (other != null)
                 Destroy(other.getGameObject());
         }
@@ -67,32 +59,28 @@ public class Runner : MonoBehaviour, iSyncable {
         if(Mathf.Abs(transform.position.x) > 5.0f || Mathf.Abs(transform.position.z) > 5.0f){
             Destroy(gameObject);
         }
+
+		base.onSyncRelease();
     }
     
-    public Guid getSyncId(){
-        return id;
-    }
-	
+
+
     public void registerToScene(){
-        scene.Runners.Add(this);
+        base.getScene().Runners.Add(this);
     }
     
-    public void registerAsSyncObject(){
-        if (id==Guid.Empty)
-            id = Guid.NewGuid();
-        scene.syncer.addSyncObject((iSyncable)this);
-    }
+
+
     public void handlePagodaRotation(){
-        PagodaController pc = scene.Pagodas.Where(x=>x.transform.position == transform.position).FirstOrDefault();
+        //check for state here to make sure we aren't blocked!
+		PagodaController pc = base.getScene().Pagodas.Where(x=>x.transform.position == transform.position).FirstOrDefault();
         if(pc!=null){
             transform.rotation = pc.transform.rotation;
         }
     }
     
-    public void  setSceneObject(TuringScene t){
-        scene = t;
-    }
-	// Update is called once per frame
+
+
 	void Update () { 
 	   transform.position += (goalPosition-previousPosition)*speed*Time.deltaTime;
 	}
@@ -104,7 +92,7 @@ public class Runner : MonoBehaviour, iSyncable {
         bool blockedLongest = false;
         Runner blockingRunner = null;
         List<Runner> contestingRunners = new List<Runner>();
-        foreach(var runner in scene.Runners){
+        foreach(var runner in base.getScene().Runners){
             if(runner.getSyncId() == id)
                 continue;
             if(runner.getCurrentPosition() == pos){
@@ -176,15 +164,10 @@ public class Runner : MonoBehaviour, iSyncable {
         return transform.position.snap();
     }
     
-    public GameObject getGameObject(){
+    public override GameObject getGameObject(){
         return gameObject;
     }
     
-    public void alter(){
-        transform.rotation = Quaternion.LookRotation(transform.right, transform.up);
-    }
-    public void alter2(){
-    }
     
     private void registerBlockedByRunner(Runner r){
         if (BlockedBy != r.getSyncId()){
@@ -193,12 +176,5 @@ public class Runner : MonoBehaviour, iSyncable {
         }
         else
             TicksBlocked +=1;
-    }
-    
-    public void setOwner(Guid? id){
-        OwnerId = id;
-    }
-    public Guid? getOwner(){
-        return OwnerId;
     }
 }

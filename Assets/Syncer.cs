@@ -30,13 +30,6 @@ public class Syncer{
 		foreach (iSyncable sync in SyncObjects) {
 			sync.onSyncRelease ();
 		}
-
-		foreach (iSyncable sync in SyncObjects) {
-			var pos = sync.getGameObject().transform.position;
-			if(Mathf.Abs (pos.snap ().x) > scene.arena.Size.x || Mathf.Abs (pos.snap().y) > scene.arena.Size.y   ){
-				Destroy(sync.getGameObject());
-			}
-		}
     }
     
     public void removeSyncObject( iSyncable obj){

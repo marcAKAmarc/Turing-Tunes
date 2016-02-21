@@ -17,7 +17,7 @@ public class TuringScene:MonoBehaviour {
         Runners = new List<Runner>();
         Pagodas = new List<PagodaController>(); 
         syncObjects = new List<iSyncable>();
-        syncer = new Syncer(syncerInterval, syncObjects);    
+        syncer = new Syncer(this, syncerInterval, syncObjects);    
     }
     
     void Start(){

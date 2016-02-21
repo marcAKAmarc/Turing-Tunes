@@ -3,49 +3,26 @@ using System.Collections;
 using System;
 using System.Linq;
 
-public class PagodaController : MonoBehaviour, iSyncable {
+public class PagodaController : Syncable {
     
-    Guid? OwnerId = null;
+    //Guid? OwnerId = null;
     [SerializeField]
     private Material turnableMaterial;
     [SerializeField]
     private Material initialMaterial;
     private bool turnable = false;
-    public TuringScene scene;
-    private Guid id;    
-    void Awake(){
-        id = Guid.NewGuid();
-    }
-	void Start () {
-       registerAsSyncObject();
+
+	protected override void Start () {
+		base.Start ();
 	   registerToScene();
 	}
     
-    
-    
-    public void onSync(){
-        
-    }
-    public void onPostSync(){
-        //check positions;
-    }
-    
-    public void onSyncRelease(){
+    public override  void onSyncRelease(){
         handlePagodaRotation();
-    }
-    
-    public Guid getSyncId(){
-        return id;
     }
     
     public void registerToScene(){
         scene.Pagodas.Add(this);
-    }
-    
-    public void registerAsSyncObject(){
-        if (id==Guid.Empty)
-            id = Guid.NewGuid();
-        scene.syncer.addSyncObject((iSyncable)this);
     }
  
     private void handlePagodaRotation(){
@@ -57,10 +34,10 @@ public class PagodaController : MonoBehaviour, iSyncable {
         Vector3 forward = transform.position + transform.forward;
         Vector3 back = transform.position - transform.forward;
         //Debug.Log(left.ToString() + " " + right.ToString() + " " + forward.ToString() + " " + back.ToString() );
-        foreach(Runner r in scene.Runners){
+        foreach(Runner r in base.getScene().Runners){
             //Debug.Log(r.transform.position.ToString());
         }
-        var positionedRunners = scene.Runners.Where(x=>
+        var positionedRunners = base.getScene().Runners.Where(x=>
             (x.transform.position.snap() == left.snap()  && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation, Quaternion.LookRotation(transform.forward, transform.up))<1f ))||  
             (x.transform.position.snap() == right.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.forward, transform.up))<1f))||
             (x.transform.position.snap() == forward.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.right,transform.up)) <1f|| Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.right, transform.up))<1f))||
@@ -68,7 +45,7 @@ public class PagodaController : MonoBehaviour, iSyncable {
         ).ToList();
         //Debug.Log(positionedRunners.Count);
         
-        var positionedPagodas = scene.Pagodas.Where(x=>
+        var positionedPagodas = base.getScene().Pagodas.Where(x=>
             (x.transform.position.snap() == left.snap()  && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation, Quaternion.LookRotation(transform.forward, transform.up))<1f ))||  
             (x.transform.position.snap() == right.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.forward, transform.up))<1f))||
             (x.transform.position.snap() == forward.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.right,transform.up)) <1f|| Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.right, transform.up))<1f))||
@@ -77,7 +54,7 @@ public class PagodaController : MonoBehaviour, iSyncable {
         
         var rotateCounterClockwise = 0;
         foreach(Runner runner in positionedRunners){
-            bool inPagoda = scene.Pagodas.Where(p=>p.transform.position.snap() == runner.transform.position.snap()).ToList().Count > 0;
+            bool inPagoda = base.getScene().Pagodas.Where(p=>p.transform.position.snap() == runner.transform.position.snap()).ToList().Count > 0;
             if(inPagoda)
                 break;
             //Debug.Log("checking runner...");
@@ -98,20 +75,8 @@ public class PagodaController : MonoBehaviour, iSyncable {
         }
     }
     
-    public void setSceneObject(TuringScene s){
-        scene = s;
-    }
     
-	// Update is called once per frame
-	void Update () {
-	   
-	}
-    
-    public void alter(){
-        transform.rotation = Quaternion.LookRotation(transform.right, transform.up);
-    }
-    
-    public void alter2(){
+    public override void alter2(){
         turnable = !turnable;
         setTurnableMaterial(turnable);
     }
@@ -126,16 +91,5 @@ public class PagodaController : MonoBehaviour, iSyncable {
             foreach(var mr in mrs)
                 mr.material = initialMaterial;
         }
-    }
-    
-    public GameObject getGameObject(){
-        return gameObject;
-    }
-    
-    public void setOwner(Guid? id){
-        OwnerId = id;
-    }
-    public Guid? getOwner(){
-        return OwnerId;
     }
 }
