@@ -173,7 +173,7 @@ public class MouseController : MonoBehaviour {
         if (y>.9f)
             vtravel = camforwardzerod;
             
-        cam.transform.position += (htravel+vtravel).normalized * Time.deltaTime * 2.0f * zoomCoefficient;
+        cam.transform.position += (htravel+vtravel).normalized * Time.deltaTime * 8.0f * zoomCoefficient;
             
     }
     

@@ -1,8 +1,9 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{95AF0168-B2A3-1D2B-B34D-84EF85FE049E}") = "Turing Tunes", "Assembly-CSharp-firstpass-vs.csproj", "{0836DCA7-3CD9-C610-CF3F-8C994E3C81CE}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
 Project("{95AF0168-B2A3-1D2B-B34D-84EF85FE049E}") = "Turing Tunes", "Assembly-CSharp-vs.csproj", "{AC257A4F-023A-DFD2-462E-0573521552D6}"
+EndProject
+Project("{95AF0168-B2A3-1D2B-B34D-84EF85FE049E}") = "Turing Tunes", "Assembly-CSharp-Editor-firstpass-vs.csproj", "{3961C3D6-FD3C-2CF1-A422-B3F3B73662CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,16 +11,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0836DCA7-3CD9-C610-CF3F-8C994E3C81CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0836DCA7-3CD9-C610-CF3F-8C994E3C81CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0836DCA7-3CD9-C610-CF3F-8C994E3C81CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0836DCA7-3CD9-C610-CF3F-8C994E3C81CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC257A4F-023A-DFD2-462E-0573521552D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC257A4F-023A-DFD2-462E-0573521552D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC257A4F-023A-DFD2-462E-0573521552D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC257A4F-023A-DFD2-462E-0573521552D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3961C3D6-FD3C-2CF1-A422-B3F3B73662CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3961C3D6-FD3C-2CF1-A422-B3F3B73662CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3961C3D6-FD3C-2CF1-A422-B3F3B73662CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3961C3D6-FD3C-2CF1-A422-B3F3B73662CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-																																											GlobalSection(MonoDevelopProperties) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+																																																							GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
@@ -38,4 +42,5 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
+
 EndGlobal

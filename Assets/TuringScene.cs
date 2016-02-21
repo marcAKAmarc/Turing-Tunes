@@ -5,7 +5,7 @@ using System.Linq;
 public class TuringScene:MonoBehaviour {
     [HideInInspector]
     public Syncer syncer;
-    
+	public Arena arena;
     public float syncerInterval;
     public List<PagodaController> Pagodas;
     public List<Runner> Runners;
@@ -13,6 +13,7 @@ public class TuringScene:MonoBehaviour {
     public List<iSyncable> syncObjects;
     
     void Awake(){
+		arena = new Arena(new Vector3(6,6,6));
         Runners = new List<Runner>();
         Pagodas = new List<PagodaController>(); 
         syncObjects = new List<iSyncable>();
@@ -29,7 +30,7 @@ public class TuringScene:MonoBehaviour {
         while (true){
             yield return new WaitForSeconds(syncer.Interval);
             syncer.updateSyncObjects();
-            GetComponent<AudioSource>().Play();
+            //GetComponent<AudioSource>().Play();
         }
     }
     

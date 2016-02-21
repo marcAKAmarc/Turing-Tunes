@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 public class Syncer{
+	public TuringScene scene;
     public float Interval;
     private List<iSyncable> SyncObjects;
     private float Start;
    
-    public Syncer(float interval, List<iSyncable> syncobjects) {
-        Interval = interval;
+    public Syncer(TuringScene myscene ,float interval, List<iSyncable> syncobjects) {
+		scene = myscene;
+		Interval = interval;
         SyncObjects = syncobjects;
         Start = Time.time;
     }
@@ -19,11 +21,22 @@ public class Syncer{
     }
    
     public void updateSyncObjects(){
-        foreach(iSyncable sync in SyncObjects){
-            sync.onSync();
-            sync.onPostSync();
-            sync.onSyncRelease();
-        }
+        foreach (iSyncable sync in SyncObjects) {
+			sync.onSync ();
+		}
+		foreach (iSyncable sync in SyncObjects) {
+			sync.onPostSync ();
+		}
+		foreach (iSyncable sync in SyncObjects) {
+			sync.onSyncRelease ();
+		}
+
+		foreach (iSyncable sync in SyncObjects) {
+			var pos = sync.getGameObject().transform.position;
+			if(Mathf.Abs (pos.snap ().x) > scene.arena.Size.x || Mathf.Abs (pos.snap().y) > scene.arena.Size.y   ){
+				Destroy(sync.getGameObject());
+			}
+		}
     }
     
     public void removeSyncObject( iSyncable obj){

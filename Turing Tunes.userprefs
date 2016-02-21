@@ -1,14 +1,21 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\Games\Dwarf Fortress\readme.txt">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Runner.cs">
     <Files>
-      <File FileName="..\..\..\..\Games\Dwarf Fortress\readme.txt" Line="1" Column="1" />
-      <File FileName="Assets\Materials\alphaShader.shader" Line="2" Column="4" />
-      <File FileName="Assets\Syncer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Arena.cs" Line="13" Column="32" />
+      <File FileName="Assets\MouseController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Syncer.cs" Line="34" Column="6" />
+      <File FileName="Assets\Runner.cs" Line="127" Column="31" />
+      <File FileName="Assets\ArenaController.cs" Line="8" Column="2" />
+      <File FileName="Assets\TuringScene.cs" Line="20" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="D:\_Projects\TuringGame\TuringRepository\Turing Tunes\Assets\Runner.cs" line="106" />
+      <Breakpoint file="D:\_Projects\TuringGame\TuringRepository\Turing Tunes\Assets\Runner.cs" line="110" />
+      <Breakpoint file="D:\_Projects\TuringGame\TuringRepository\Turing Tunes\Assets\Runner.cs" line="114" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

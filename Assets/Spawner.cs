@@ -27,15 +27,16 @@ public class Spawner : MonoBehaviour, iSyncable {
     
 	public void onSync(){
 //        Debug.Log("synced...");
-        tickCount+=1;
-        tickCount = tickCount % spawnCycleLength;
-        if(tickCount == 0)
-            spawnSpawnObject();
+
     }
     public void onPostSync(){
         
     }
     public void onSyncRelease(){
+		tickCount+=1;
+		tickCount = tickCount % spawnCycleLength;
+		if(tickCount == 0 && checkPositionFree(transform.position) )
+			spawnSpawnObject();
         
     }
     public Guid getSyncId(){
@@ -88,4 +89,16 @@ public class Spawner : MonoBehaviour, iSyncable {
     public Guid? getOwner(){
         return OwnerId;
     }
+
+	private bool checkPositionFree(Vector3 pos){
+		bool free = true;
+		foreach (var runner in scene.Runners) {
+			if (runner.getCurrentPosition ().snap () == pos.snap () || runner.getGoalPosition().snap ()==pos.snap ()) {
+				free = false;
+				break;
+			}
+		}
+		
+		return free;
+	}
 }
