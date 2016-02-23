@@ -86,7 +86,14 @@ public class Runner : Syncable {
 	}
     
     private bool checkPositionFree(Vector3 pos){
-        bool free = true;
+		return checkObstructionFree(pos) && checkRunnerTrafficFree(pos);   
+	}
+	private bool checkObstructionFree(Vector3 pos){
+		var solid = getScene ().Solids.Where (x => x.transform.position.snap () == pos.snap ()).FirstOrDefault ();
+		return (solid == null);
+	}
+	private bool checkRunnerTrafficFree(Vector3 pos){
+		bool free = true;
         bool contested = false;
         bool contestingWinner = false;
         bool blockedLongest = false;
@@ -128,8 +135,6 @@ public class Runner : Syncable {
 				}
             }
         }
-        
-
 
 		//update ticksblocked by blocked by
 		if (!free) {
@@ -147,8 +152,6 @@ public class Runner : Syncable {
 		else
 			BlockedBy = null;
 
-
-        
         return free && (!contested || (contested && contestingWinner));            
     }
     

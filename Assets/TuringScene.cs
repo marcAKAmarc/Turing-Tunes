@@ -10,6 +10,7 @@ public class TuringScene:MonoBehaviour {
     public List<PagodaController> Pagodas;
     public List<Runner> Runners;
     public List<Spawner> Spawners;
+	public List<SolidController> Solids;
     public List<iSyncable> syncObjects;
     
     void Awake(){
@@ -17,6 +18,7 @@ public class TuringScene:MonoBehaviour {
         Runners = new List<Runner>();
         Pagodas = new List<PagodaController>(); 
         syncObjects = new List<iSyncable>();
+		Solids = new List<SolidController> ();
         syncer = new Syncer(this, syncerInterval, syncObjects);    
     }
     
@@ -50,9 +52,15 @@ public class TuringScene:MonoBehaviour {
                 if(deletePagoda!= null){
                     Pagodas.Remove(deletePagoda);
                     syncer.removeSyncObject(sync);
-                }
-            }
-            
-        }
-    }
+                }else{
+					var deleteSolid = Solids.Where(x=>x.getSyncId() == sync.getSyncId()).FirstOrDefault();
+					if(deleteSolid!= null){
+						Solids.Remove(deleteSolid);
+						syncer.removeSyncObject(sync);
+					}
+				}
+			}
+			
+		}
+	}
 }
