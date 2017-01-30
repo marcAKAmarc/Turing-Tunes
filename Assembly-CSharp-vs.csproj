@@ -49,6 +49,13 @@
      <Compile Include="Assets\Arena.cs" />
      <Compile Include="Assets\ArenaController.cs" />
      <Compile Include="Assets\ExtensionMethods.cs" />
+     <Compile Include="Assets\Ground.cs" />
+     <Compile Include="Assets\MarkingController.cs" />
+     <Compile Include="Assets\ModPlanter.cs" />
+     <Compile Include="Assets\ModTiller.cs" />
+     <Compile Include="Assets\ModulatorController.cs" />
+     <Compile Include="Assets\Module.cs" />
+     <Compile Include="Assets\ModuleHost.cs" />
      <Compile Include="Assets\MouseController.cs" />
      <Compile Include="Assets\PagodaController.cs" />
      <Compile Include="Assets\RockWallController.cs" />

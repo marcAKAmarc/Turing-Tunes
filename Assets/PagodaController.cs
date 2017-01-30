@@ -34,9 +34,7 @@ public class PagodaController : Syncable {
         Vector3 forward = transform.position + transform.forward;
         Vector3 back = transform.position - transform.forward;
         //Debug.Log(left.ToString() + " " + right.ToString() + " " + forward.ToString() + " " + back.ToString() );
-        foreach(Runner r in base.getScene().Runners){
-            //Debug.Log(r.transform.position.ToString());
-        }
+        
         var positionedRunners = base.getScene().Runners.Where(x=>
             (x.transform.position.snap() == left.snap()  && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation, Quaternion.LookRotation(transform.forward, transform.up))<1f ))||  
             (x.transform.position.snap() == right.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.forward, transform.up))<1f))||
@@ -45,12 +43,12 @@ public class PagodaController : Syncable {
         ).ToList();
         //Debug.Log(positionedRunners.Count);
         
-        var positionedPagodas = base.getScene().Pagodas.Where(x=>
-            (x.transform.position.snap() == left.snap()  && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation, Quaternion.LookRotation(transform.forward, transform.up))<1f ))||  
-            (x.transform.position.snap() == right.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.forward, transform.up))<1f))||
-            (x.transform.position.snap() == forward.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.right,transform.up)) <1f|| Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.right, transform.up))<1f))||
-            (x.transform.position.snap() == back.snap() &&(Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.right,transform.up)) < 1f || Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.right, transform.up))<1f))
-        ).ToList();
+//        var positionedPagodas = base.getScene().Pagodas.Where(x=>
+//            (x.transform.position.snap() == left.snap()  && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation, Quaternion.LookRotation(transform.forward, transform.up))<1f ))||  
+//            (x.transform.position.snap() == right.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.forward,transform.up)) < 1f||Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.forward, transform.up))<1f))||
+//            (x.transform.position.snap() == forward.snap() && (Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.right,transform.up)) <1f|| Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.right, transform.up))<1f))||
+//            (x.transform.position.snap() == back.snap() &&(Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(-transform.right,transform.up)) < 1f || Quaternion.Angle(x.transform.rotation , Quaternion.LookRotation(transform.right, transform.up))<1f))
+//        ).ToList();
         
         var rotateCounterClockwise = 0;
         foreach(Runner runner in positionedRunners.Where (x=>x.getGoalPosition().snap() != x.transform.position.snap ())){

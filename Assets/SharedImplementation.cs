@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 public class Syncable : MonoBehaviour, iSyncable {
@@ -6,6 +6,7 @@ public class Syncable : MonoBehaviour, iSyncable {
 	protected TuringScene scene;
 	protected Guid? OwnerId;
 	protected DateTime TimeCreated;
+	private bool toBeDeleted = false; 
 	protected virtual void Awake(){
 		id = Guid.NewGuid ();
 	}
@@ -19,9 +20,19 @@ public class Syncable : MonoBehaviour, iSyncable {
 		registerAsSyncObject();
 	}
 	protected virtual void OnDestroy(){
+		if (transform.GetComponent<MarkingController> () != null) {
+			var something = "whatever";
+		}
 		scene.removeSyncObject((iSyncable)this);
 	}
-	public virtual GameObject getGameObject(){ return gameObject;}
+	public void Delete(){
+		toBeDeleted = true;
+	}
+
+	public virtual GameObject getGameObject(){ 
+
+		return gameObject;
+	}
 
 	//these events happen in this order!
 	public virtual void onSync(){}
@@ -30,7 +41,13 @@ public class Syncable : MonoBehaviour, iSyncable {
 		if (scene.arena.Size.x <= Mathf.Abs (transform.position.x) 
 		|| scene.arena.Size.z <= Mathf.Abs (transform.position.z) 
 		|| scene.arena.Size.y <= Mathf.Abs (transform.position.y)) {
-			Destroy (gameObject);	
+			//Destroy (gameObject);
+			Delete ();
+		}
+	}
+	public virtual void onSyncDelete(){
+		if (toBeDeleted == true) {
+			Destroy (gameObject);
 		}
 	}
 
@@ -41,6 +58,10 @@ public class Syncable : MonoBehaviour, iSyncable {
 	public virtual void setSceneObject(TuringScene t){
 		scene = t;
 	}
+
+	public virtual TuringScene getSceneObject(){
+		return scene;
+	}
 	
 	public virtual void setOwner(Guid? ownerId){
 		OwnerId = ownerId;
@@ -50,7 +71,11 @@ public class Syncable : MonoBehaviour, iSyncable {
 	}
 	
 	public virtual void registerAsSyncObject(){
+		try{
 		scene.syncer.addSyncObject ((iSyncable)this);
+		}catch(Exception ex){
+			throw;
+		}
 	}
 	
 	public virtual void alter(){

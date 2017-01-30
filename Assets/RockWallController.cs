@@ -12,7 +12,6 @@ public class RockWallController : SolidController {
 
 		Mesh mesh = Model.GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
-		Vector3[] normals = mesh.normals;
 		int i = 0;
 		float maxy = -9999.0f;
 		while (i < vertices.Length) {

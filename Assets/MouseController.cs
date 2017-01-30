@@ -87,7 +87,6 @@ public class MouseController : MonoBehaviour {
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit)) {
-            Transform objectHit = hit.transform;
             transform.position = hit.point.snap();
             transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         }
@@ -95,8 +94,8 @@ public class MouseController : MonoBehaviour {
             
     void handlePlaceRequest(){
         Transform t = Instantiate(placables[selectionPosition], transform.position,Quaternion.identity) as Transform;
-        var syncable = t.GetComponent<iSyncable>();
-        if (syncable!=null)
+        var syncables = t.GetComponents<iSyncable>();
+        foreach(var syncable in syncables)
             syncable.setSceneObject(scene);
     }
     
@@ -132,7 +131,8 @@ public class MouseController : MonoBehaviour {
         bool deleted = syncobjs.Count > 0;
         foreach(var syncobj in syncobjs){
             //scene.removeSyncObject(syncobj);
-            Destroy(syncobj.getGameObject());
+            //Destroy(syncobj.getGameObject());
+			syncobj.Delete();
         }
         return deleted;   
     }

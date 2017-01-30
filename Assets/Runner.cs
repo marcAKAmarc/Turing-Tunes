@@ -4,7 +4,31 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Runner : Syncable {
+
+
+
+
+
+
+public class Runner : /*Syncable,*/ /*iModuleHost*/ ModuleHost {
+
+//	iModule Module = null;
+//	public override GameObject getGameObject(){
+//		return base.getGameObject ();
+//	}
+//	public virtual void registerModule(iModule module){
+//		Module = module; 
+//	}
+//	public void resetModule(){
+//		Module.destroySelf ();
+//		Module = null;
+//	}
+//	public virtual ModulationType? getModuleType(){
+//		if (Module == null)
+//			return null;
+//		else
+//			return Module.getModType();
+//	}
 
 	private float speed;
     private Vector3 goalPosition;
@@ -17,7 +41,7 @@ public class Runner : Syncable {
     
     // Use this for initialization
 	private void updateSpeed () {
-	   speed = 1.0f/base.getScene().syncer.Interval;
+        speed = 1.0f / Syncer.Interval;//base.getScene().syncer.Interval;
 	}
     
     protected override void Start(){
@@ -34,6 +58,9 @@ public class Runner : Syncable {
         transform.position = goalPosition.snap();
         handlePagodaRotation();
         goalPosition = (transform.position+transform.forward).snap();
+        updateReactors();
+
+		executeModule ();
     }
     
     public override void onPostSync(){
@@ -42,7 +69,9 @@ public class Runner : Syncable {
             goalPosition =transform.position.snap();
         }
         previousPosition = transform.position.snap();
-    }
+    
+		postExecuteModule ();
+	}
     
     public override void onSyncRelease(){
 		if(goalPosition.snap () == transform.position.snap ())
@@ -53,14 +82,18 @@ public class Runner : Syncable {
         if(TicksBlockedByBlockedBy>FightThreshold){
             var other = base.getScene().syncer.findSyncObjectsById((Guid)BlockedBy);
             if (other != null)
-                Destroy(other.getGameObject());
+				other.Delete ();
+				//Destroy(other.getGameObject());
         }
         
         if(Mathf.Abs(transform.position.x) > 5.0f || Mathf.Abs(transform.position.z) > 5.0f){
-            Destroy(gameObject);
+			Delete ();
+			//Destroy(gameObject);
         }
 
 		base.onSyncRelease();
+
+		executeReleaseModule ();
     }
     
 
@@ -76,6 +109,61 @@ public class Runner : Syncable {
 		PagodaController pc = base.getScene().Pagodas.Where(x=>x.transform.position == transform.position).FirstOrDefault();
         if(pc!=null){
             transform.rotation = pc.transform.rotation;
+        }
+    }
+
+    public void updateReactors()
+    {
+        var q_fieldreacotors = base.getScene().syncObjects.Where(x => x is iFieldReactor);
+        var q_on = q_fieldreacotors.Where(x => x.getGameObject().transform.position == transform.position);
+        var q_stayingOn = transform.position == goalPosition ? q_on : new List<iSyncable>().Where(x=>false);
+        var q_leavingOn = transform.position != goalPosition ? q_on : new List<iSyncable>().Where(x => false);
+        var q_approachingOn = q_fieldreacotors.Where(x => x.getGameObject().transform.position == goalPosition && goalPosition != transform.position);
+        var q_approachingSide = q_fieldreacotors
+            .Where(x => x.getGameObject().transform.position != transform.position) //not in the position you are on
+            .Where(x => x.getGameObject().transform.position != transform.position + (2.0f * (goalPosition - transform.position))) //not in the position infront of your goal position
+            .Where(x => Mathf.Abs(x.getGameObject().transform.position.x - goalPosition.x) < 1.5f) //within 1.5f x of goalPos
+            .Where(x => Mathf.Abs(x.getGameObject().transform.position.z - goalPosition.z) < 1.5f) //within 1.5f y of goalPos
+            .Where(x => x.getGameObject().transform.position.x == goalPosition.x || x.getGameObject().transform.position.z == goalPosition.z); //disqualify diagnols
+        var q_side = q_fieldreacotors
+            .Where(x => x.getGameObject().transform.position != transform.position) //not in the position you are on
+            .Where(x => x.getGameObject().transform.position != goalPosition) //not in the goal position
+            .Where(x => Mathf.Abs(x.getGameObject().transform.position.x - transform.position.x) < 1.5f) //within 1.5f x of goalPos
+            .Where(x => Mathf.Abs(x.getGameObject().transform.position.z - transform.position.z) < 1.5f) //within 1.5f y of goalPos
+            .Where(x => x.getGameObject().transform.position.x == transform.position.x || x.getGameObject().transform.position.z == transform.position.z); //disqualify diagnols
+        var q_stayingSide = transform.position == goalPosition ? q_side : new List<iSyncable>().Where(x => false);
+        var q_leavingSide = transform.position != goalPosition ? q_side : new List<iSyncable>().Where(x => false);
+
+        foreach (var r in q_stayingOn)
+        {
+            var fr = r.getGameObject().GetComponent<iFieldReactor>();
+            fr.StayingOn();
+        }
+        foreach (var r in q_leavingOn)
+        {
+            var fr = r.getGameObject().GetComponent<iFieldReactor>();
+            fr.LeavingOn();
+        }
+        foreach (var r in q_approachingOn)
+        {
+            var fr = r.getGameObject().GetComponent<iFieldReactor>();
+            fr.ApproachingOn();
+        }
+
+        foreach (var r in q_approachingSide)
+        {
+            var fr = r.getGameObject().GetComponent<iFieldReactor>();
+            fr.ApproachingSide();
+        }
+        foreach (var r in q_stayingSide)
+        {
+            var fr = r.getGameObject().GetComponent<iFieldReactor>();
+            fr.StayingSide();
+        }
+        foreach (var r in q_leavingSide)
+        {
+            var fr = r.getGameObject().GetComponent<iFieldReactor>();
+            fr.LeavingSide();
         }
     }
     
@@ -96,7 +184,6 @@ public class Runner : Syncable {
 		bool free = true;
         bool contested = false;
         bool contestingWinner = false;
-        bool blockedLongest = false;
         Runner blockingRunner = null;
         List<Runner> contestingRunners = new List<Runner>();
         foreach(var runner in base.getScene().Runners){
@@ -166,11 +253,6 @@ public class Runner : Syncable {
     public Vector3 getCurrentPosition(){
         return transform.position.snap();
     }
-    
-    public override GameObject getGameObject(){
-        return gameObject;
-    }
-    
     
     private void registerBlockedByRunner(Runner r){
         if (BlockedBy != r.getSyncId()){

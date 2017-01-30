@@ -1,17 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RockWallController.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\GridRunner\GridRepository\GridRunner\Grid Runner\Assets\PlayerGridController.cs">
     <Files>
-      <File FileName="Assets\MouseController.cs" Line="1" Column="1" />
-      <File FileName="Assets\iSyncable.cs" Line="1" Column="1" />
-      <File FileName="Assets\PagodaController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Spawner.cs" Line="1" Column="1" />
-      <File FileName="Assets\SharedImplementation.cs" Line="1" Column="1" />
-      <File FileName="Assets\Runner.cs" Line="1" Column="1" />
-      <File FileName="Assets\Syncer.cs" Line="1" Column="1" />
-      <File FileName="Assets\TuringScene.cs" Line="1" Column="1" />
-      <File FileName="Assets\SolidController.cs" Line="1" Column="1" />
-      <File FileName="Assets\RockWallController.cs" Line="15" Column="36" />
+      <File FileName="..\..\..\GridRunner\GridRepository\GridRunner\Grid Runner\Assets\PlayerGridController.cs" Line="27" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

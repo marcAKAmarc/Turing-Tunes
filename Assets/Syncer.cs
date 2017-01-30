@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 public class Syncer{
 	public TuringScene scene;
-    public float Interval;
+    public static float Interval;
     private List<iSyncable> SyncObjects;
     private float Start;
    
@@ -29,6 +29,9 @@ public class Syncer{
 		}
 		foreach (iSyncable sync in SyncObjects) {
 			sync.onSyncRelease ();
+		}
+		foreach (iSyncable sync in SyncObjects) {
+			sync.onSyncDelete ();
 		}
     }
     

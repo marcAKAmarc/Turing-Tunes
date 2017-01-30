@@ -30,7 +30,7 @@ public class TuringScene:MonoBehaviour {
     }
     IEnumerator Timer() {
         while (true){
-            yield return new WaitForSeconds(syncer.Interval);
+            yield return new WaitForSeconds(Syncer.Interval);
             syncer.updateSyncObjects();
             //GetComponent<AudioSource>().Play();
         }
@@ -41,26 +41,27 @@ public class TuringScene:MonoBehaviour {
         var deleteSpawner = Spawners.Where(x=>x.getSyncId() == sync.getSyncId()).FirstOrDefault();
         if(deleteSpawner != null){
             Spawners.Remove(deleteSpawner);
-            syncer.removeSyncObject(sync);
+            
         }else{
             var deleteRunner = Runners.Where(x=>x.getSyncId() == sync.getSyncId()).FirstOrDefault();
             if(deleteRunner!= null){
                 Runners.Remove(deleteRunner);
-                syncer.removeSyncObject(sync);
+                
             }else{
                 var deletePagoda = Pagodas.Where(x=>x.getSyncId() == sync.getSyncId()).FirstOrDefault();
                 if(deletePagoda!= null){
                     Pagodas.Remove(deletePagoda);
-                    syncer.removeSyncObject(sync);
+                   
                 }else{
 					var deleteSolid = Solids.Where(x=>x.getSyncId() == sync.getSyncId()).FirstOrDefault();
 					if(deleteSolid!= null){
 						Solids.Remove(deleteSolid);
-						syncer.removeSyncObject(sync);
+
 					}
 				}
 			}
-			
 		}
+
+		syncer.removeSyncObject(sync);
 	}
 }
