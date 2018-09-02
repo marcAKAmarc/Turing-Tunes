@@ -2,11 +2,25 @@ using UnityEngine;
 using System.Collections;
 using System;
 public class Syncable : MonoBehaviour, iSyncable {
+
+    public virtual bool deletable { get; set; }
+    public virtual bool preventPlacement { get; set; }
+    public virtual bool pickable { get; set; }
+    public virtual Transform model { get; set; }
+
 	protected Guid id;
 	protected TuringScene scene;
 	protected Guid? OwnerId;
 	protected DateTime TimeCreated;
 	private bool toBeDeleted = false; 
+
+    public Syncable()
+    {
+        deletable = true;
+        preventPlacement = true;
+        pickable = false;
+    }
+
 	protected virtual void Awake(){
 		id = Guid.NewGuid ();
 	}
@@ -16,6 +30,7 @@ public class Syncable : MonoBehaviour, iSyncable {
 	}
 
 	protected virtual void Start(){
+        scene = TuringScene.CurrentController;
 		TimeCreated = DateTime.Now;
 		registerAsSyncObject();
 	}
@@ -23,7 +38,14 @@ public class Syncable : MonoBehaviour, iSyncable {
 		if (transform.GetComponent<MarkingController> () != null) {
 			var something = "whatever";
 		}
-		scene.removeSyncObject((iSyncable)this);
+        try
+        {
+            scene.removeSyncObject((iSyncable)this);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
 	}
 	public void Delete(){
 		toBeDeleted = true;
@@ -56,7 +78,7 @@ public class Syncable : MonoBehaviour, iSyncable {
 	public virtual Guid getSyncId(){return id;}
 	
 	public virtual void setSceneObject(TuringScene t){
-		scene = t;
+		//scene = t;
 	}
 
 	public virtual TuringScene getSceneObject(){

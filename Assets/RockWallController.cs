@@ -5,7 +5,13 @@ public class RockWallController : SolidController {
 	public Transform Model;
 	private float intensity = .25f;
 	private float seed;
-	protected override void Start() {
+    public bool Deletable;
+    protected override void Awake()
+    {
+        base.Awake();
+        base.deletable = Deletable;
+    }
+    protected override void Start() {
 		base.Start ();
 
 		seed = 0.0f; //must get seed from place common to rock models..  Mathf.PI * 2.0f * UnityEngine.Random.value;

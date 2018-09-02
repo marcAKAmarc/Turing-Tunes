@@ -12,35 +12,48 @@ using System.Linq;
 
 public class Runner : /*Syncable,*/ /*iModuleHost*/ ModuleHost {
 
-//	iModule Module = null;
-//	public override GameObject getGameObject(){
-//		return base.getGameObject ();
-//	}
-//	public virtual void registerModule(iModule module){
-//		Module = module; 
-//	}
-//	public void resetModule(){
-//		Module.destroySelf ();
-//		Module = null;
-//	}
-//	public virtual ModulationType? getModuleType(){
-//		if (Module == null)
-//			return null;
-//		else
-//			return Module.getModType();
-//	}
+    //	iModule Module = null;
+    //	public override GameObject getGameObject(){
+    //		return base.getGameObject ();
+    //	}
+    //	public virtual void registerModule(iModule module){
+    //		Module = module; 
+    //	}
+    //	public void resetModule(){
+    //		Module.destroySelf ();
+    //		Module = null;
+    //	}
+    //	public virtual ModulationType? getModuleType(){
+    //		if (Module == null)
+    //			return null;
+    //		else
+    //			return Module.getModType();
+    //	}
 
+    public bool PreventPlacement;
+    public bool Deletable;
+    public bool Pickable;
 	private float speed;
     private Vector3 goalPosition;
     private Vector3 previousPosition;
     private int FightThreshold = 2000;
     private Guid? BlockedBy;
     private int TicksBlocked=0;
-    private int TicksBlockedByBlockedBy=0; 
+    private int TicksBlockedByBlockedBy=0;
+    public Transform Model;
 
-    
+
+    protected override void Awake()
+    {
+        base.Awake();
+        base.preventPlacement = PreventPlacement;
+        base.deletable = Deletable;
+        base.pickable = Pickable;
+        base.model = Model;
+    }
+
     // Use this for initialization
-	private void updateSpeed () {
+    private void updateSpeed () {
         speed = 1.0f / Syncer.Interval;//base.getScene().syncer.Interval;
 	}
     

@@ -22,16 +22,20 @@ public class Syncer{
    
     public void updateSyncObjects(){
         foreach (iSyncable sync in SyncObjects) {
-			sync.onSync ();
+            if(sync.getGameObject().activeInHierarchy)
+			    sync.onSync ();
 		}
 		foreach (iSyncable sync in SyncObjects) {
-			sync.onPostSync ();
+            if (sync.getGameObject().activeInHierarchy)
+                sync.onPostSync ();
 		}
 		foreach (iSyncable sync in SyncObjects) {
-			sync.onSyncRelease ();
+            if (sync.getGameObject().activeInHierarchy)
+                sync.onSyncRelease ();
 		}
 		foreach (iSyncable sync in SyncObjects) {
-			sync.onSyncDelete ();
+            if (sync.getGameObject().activeInHierarchy)
+                sync.onSyncDelete ();
 		}
     }
     
@@ -41,6 +45,12 @@ public class Syncer{
     
     public List<iSyncable> findSyncObjectsByPosition(Vector3 pos){
         List<iSyncable> found = SyncObjects.Where(x=>x.getGameObject().transform.position == pos).ToList();
+        return found;
+    }
+
+    public List<iSyncable> findSyncObjectsBySnappedPosition(Vector3 pos)
+    {
+        List<iSyncable> found = SyncObjects.Where(x => x.getGameObject().transform.position.snap() == pos).ToList();
         return found;
     }
     

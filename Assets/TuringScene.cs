@@ -11,10 +11,13 @@ public class TuringScene:MonoBehaviour {
     public List<Runner> Runners;
     public List<Spawner> Spawners;
 	public List<SolidController> Solids;
+    public GoalBeat GoalBeat;
     public List<iSyncable> syncObjects;
-    
+    public static TuringScene CurrentController;
+
     void Awake(){
-		arena = new Arena(new Vector3(6,6,6));
+        CurrentController = this;
+		//arena = new Arena(new Vector3(6,6,6));
         Runners = new List<Runner>();
         Pagodas = new List<PagodaController>(); 
         syncObjects = new List<iSyncable>();

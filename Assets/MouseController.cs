@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour {
     public TuringScene scene;
@@ -15,13 +16,23 @@ public class MouseController : MonoBehaviour {
     private Guid id;
     
     private float zoomCoefficient = 1;
-    
-	
+    private int LayerField;
+
+    private void OnEnable()
+    {
+        updateDisplayables();
+    }
+    private void OnDisable()
+    {
+        if (displayableInstances.Count > selectionPosition)
+            displayableInstances[selectionPosition].gameObject.SetActive(false);
+    }
     void Start(){
+        LayerField = LayerMask.NameToLayer("Field");
         id = Guid.NewGuid();
         selectionPosition = 0;
         displayableInstances = createDisplayables();
-        Debug.Log("displayableInstances.count " + displayableInstances.Count.ToString() );
+        //Debug.Log("displayableInstances.count " + displayableInstances.Count.ToString() );
         updateDisplayables();
     }
     
@@ -46,7 +57,7 @@ public class MouseController : MonoBehaviour {
         updateDisplayables();
         
          if (Input.GetMouseButtonDown(0)){
-            if(!handleDeleteRequest())   
+                handleDeleteRequest();   
                 handlePlaceRequest();
          }
         
@@ -56,7 +67,7 @@ public class MouseController : MonoBehaviour {
          if(Input.GetMouseButtonDown(2))
             handleAlter2Request();
          
-         handleCameraScroll();  
+         //handleCameraScroll();  
 
     }
     
@@ -74,29 +85,37 @@ public class MouseController : MonoBehaviour {
     
     private void updateDisplayables(){
         for(var i = 0; i<displayableInstances.Count; i++){
-            if(i==selectionPosition)
+            displayableInstances[i].position = transform.position;
+
+            if (i==selectionPosition)
                 displayableInstances[i].gameObject.SetActive(true);
             else
                 displayableInstances[i].gameObject.SetActive(false);
-                
-            displayableInstances[i].position = transform.position;
         }
     }
     
     void updatePosition(){
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit)) {
+        if (Physics.Raycast(ray, out hit,100000, 1<<9)) {
             transform.position = hit.point.snap();
             transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         }
     }        
             
     void handlePlaceRequest(){
+        if (isMouseOverUI())
+            return;
+        var syncobjs = scene.syncer.findSyncObjectsByPosition(transform.position.snap());
+
+        //if there are objects in the way, don't place anything
+        if (syncobjs.Where(x => x.preventPlacement).Count() > 0)
+            return;
+
         Transform t = Instantiate(placables[selectionPosition], transform.position,Quaternion.identity) as Transform;
-        var syncables = t.GetComponents<iSyncable>();
-        foreach(var syncable in syncables)
-            syncable.setSceneObject(scene);
+        //var syncables = t.GetComponents<iSyncable>();
+        /*foreach(var syncable in syncables)
+            syncable.setSceneObject(scene);*/
     }
     
     void handleAlterRequest(){
@@ -127,12 +146,13 @@ public class MouseController : MonoBehaviour {
     }
     
     bool handleDeleteRequest(){
-        var syncobjs = scene.syncer.findSyncObjectsByPosition(transform.position.snap());
+        var syncobjs = scene.syncer.findSyncObjectsByPosition(transform.position.snap()).Where(x=>x.deletable).ToList();
         bool deleted = syncobjs.Count > 0;
         foreach(var syncobj in syncobjs){
             //scene.removeSyncObject(syncobj);
             //Destroy(syncobj.getGameObject());
-			syncobj.Delete();
+            if(syncobj.deletable)
+			    syncobj.Delete();
         }
         return deleted;   
     }
@@ -150,6 +170,8 @@ public class MouseController : MonoBehaviour {
     }
     
     void handleCameraScroll(){
+        if (isMouseOffScreen() || isMouseOverUI())
+            return;
         var x = Input.mousePosition.x / Screen.width;
         var y = Input.mousePosition.y / Screen.height;
         
@@ -170,7 +192,7 @@ public class MouseController : MonoBehaviour {
             htravel = camrightzerod;
         if (y<.1f)
             vtravel = cambackzerod;
-        if (y>.9f)
+        if (y>.75f)
             vtravel = camforwardzerod;
             
         cam.transform.position += (htravel+vtravel).normalized * Time.deltaTime * 8.0f * zoomCoefficient;
@@ -194,5 +216,27 @@ public class MouseController : MonoBehaviour {
         foundObj = scene.Pagodas.Where(x=>x.transform.position.snap() == transform.position.snap()).FirstOrDefault();
         return foundObj;
     }   
-	
+
+
+    private bool isMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    private bool isMouseOffScreen()
+    {
+        //Debug.Log(Input.mousePosition);
+#if UNITY_EDITOR
+        if (Input.mousePosition.x <= 0 || Input.mousePosition.y <= 0 || Input.mousePosition.x >= Screen.width || Input.mousePosition.y >= Screen.height)
+            return true;
+        else
+            return false;
+#else
+        if (Input.mousePosition.x == 0 || Input.mousePosition.y == 0 || Input.mousePosition.x >= Screen.width - 1 || Input.mousePosition.y >= Screen.height - 1)
+            return true;
+        else
+            return false;
+#endif
+    }
+
 }

@@ -2,8 +2,11 @@
 using System.Collections;
 
 public class SolidController: Syncable {
-
-	protected override void Start(){
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+    protected override void Start(){
 		base.Start ();
 		registerToScene();
 	}

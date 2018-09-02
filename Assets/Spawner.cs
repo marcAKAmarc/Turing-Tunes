@@ -7,8 +7,9 @@ public class Spawner : Syncable {
 
     public Transform spawnObject;
     public int spawnCycleLength;
+    public bool OneAtATime;
     private int tickCount;
-    
+    private Transform previouslyCreatedItem;
 
     
     protected override void Start(){
@@ -17,11 +18,18 @@ public class Spawner : Syncable {
     }
 
     public override void onSyncRelease(){
-		tickCount+=1;
-		tickCount = tickCount % spawnCycleLength;
-		if(tickCount == 0 && checkPositionFree(transform.position) )
-			spawnSpawnObject();
-		base.onSyncRelease ();
+        if (OneAtATime )
+        {
+            if(!(previouslyCreatedItem != null))
+                previouslyCreatedItem = spawnSpawnObject();
+        }
+        else {
+            tickCount += 1;
+            tickCount = tickCount % spawnCycleLength;
+            if (tickCount == 0 && checkPositionFree(transform.position))
+                previouslyCreatedItem = spawnSpawnObject();
+            base.onSyncRelease();
+        }
     }
     
     public void registerToScene(){
@@ -36,8 +44,13 @@ public class Spawner : Syncable {
                 return null;
         }
         Transform t = Instantiate(spawnObject, transform.position.snap(), transform.rotation) as Transform;
-        t.GetComponent<iSyncable>().setOwner(OwnerId);
-        t.GetComponent<iSyncable>().setSceneObject(scene); //how to do this genericly
+        var syncableComponents = t.GetComponents<iSyncable>();
+        foreach(var syncableComponent in syncableComponents)
+        {
+            syncableComponent.setOwner(OwnerId);
+            syncableComponent.setSceneObject(scene); //how to do this genericly
+        }
+
         return t;    
     }
 

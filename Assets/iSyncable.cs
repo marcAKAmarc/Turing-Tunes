@@ -1,8 +1,12 @@
 ﻿using System;
 using UnityEngine;
 public interface iSyncable {
-    
-     GameObject getGameObject();
+
+    bool deletable { get; set; }
+    bool preventPlacement { get; set; }
+    bool pickable { get; set; }
+    Transform model { get; set; }
+    GameObject getGameObject();
     //these events happen in this order!
     void onSync();
     void onPostSync();

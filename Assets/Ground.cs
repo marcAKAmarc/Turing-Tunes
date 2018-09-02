@@ -12,11 +12,11 @@ public class Ground : Syncable{
 		state = gs;
 
 		if (gs == GroundState.Planted) {
-			var planted = transform.FindChild("Planted");
+			var planted = transform.Find("Planted");
 			planted.gameObject.SetActive(true);
 		}
 		if (gs == GroundState.Tilled) {
-			var tilled = transform.FindChild("Tilled");
+			var tilled = transform.Find("Tilled");
 			tilled.gameObject.SetActive(true);
 		}
 	}
