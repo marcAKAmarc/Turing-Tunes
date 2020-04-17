@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 public class Carrier : Syncable {
 
-    Transform carriedResource = null;
+    public Transform carriedResource = null;
     public Transform carryTransform;
     public bool Deletable;
     public bool PreventPlacement;
@@ -31,13 +31,21 @@ public class Carrier : Syncable {
 
     private void tryGetResource()
     {
-        if (carriedResource != null)
-            return;
+        /*if (carriedResource != null)
+            return;*/
 
-        var resourcePool = (new Repositories()).getResourcePoolRepository().GetAll().Where(x => x.transform.position.x == transform.position.x && x.transform.position.z == transform.position.z).FirstOrDefault();
+        var resourcePool = (new Repositories()).getResourcePoolRepository().GetAll().Where(x => x.transform.position.x == transform.position.x && x.transform.position.z == transform.position.z && x.gameObject.activeInHierarchy).FirstOrDefault();
 
         if (resourcePool == null)
             return;
+
+
+        var type = resourcePool.GetResourceType();
+
+        if (carriedResource != null && type.Name == carriedResource.GetComponent<Resource>().GetType().Name)
+            return;
+
+        throwOutResource();
 
         var item = resourcePool.GetResource();
 
@@ -48,7 +56,7 @@ public class Carrier : Syncable {
     {
         if (carriedResource == null)
             return;
-        var resourceBank = (new Repositories()).getBankRepository().GetAll().Where(x => x.transform.position == transform.position).FirstOrDefault();
+        var resourceBank = (new Repositories()).getBankRepository().GetAll().Where(x => x.transform.position == transform.position && x.gameObject.activeInHierarchy).FirstOrDefault();
 
         if (resourceBank == null)
             return;
@@ -59,12 +67,19 @@ public class Carrier : Syncable {
             carriedResource = null;
     }
 
+    private void throwOutResource()
+    {
+        if(carriedResource!=null)
+            Destroy(carriedResource.gameObject);
+        carriedResource = null;
+    }
+
     void Update()
     {
         if (carriedResource != null)
         {
             var goal = carryTransform.position - carriedResource.transform.position;
-            carriedResource.transform.position += (goal / 2.0f); 
+            carriedResource.transform.position += (goal / 8.0f); 
         }
     }
 

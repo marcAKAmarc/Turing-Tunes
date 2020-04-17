@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,6 +32,11 @@ public class ResourcePool : MonoBehaviour {
     {
         var resource = Transform.Instantiate(resourcePrefab, transform.position, transform.rotation) as Transform;
         return resource;
+    }
+
+    public Type GetResourceType()
+    {
+        return resourcePrefab.GetComponent<Resource>().GetType();
     }
 }
 

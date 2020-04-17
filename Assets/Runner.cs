@@ -99,10 +99,10 @@ public class Runner : /*Syncable,*/ /*iModuleHost*/ ModuleHost {
 				//Destroy(other.getGameObject());
         }
         
-        if(Mathf.Abs(transform.position.x) > 5.0f || Mathf.Abs(transform.position.z) > 5.0f){
+        /*if(Mathf.Abs(transform.position.x) > 5.0f || Mathf.Abs(transform.position.z) > 5.0f){
 			Delete ();
 			//Destroy(gameObject);
-        }
+        }*/
 
 		base.onSyncRelease();
 

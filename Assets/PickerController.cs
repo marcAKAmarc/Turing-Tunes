@@ -140,7 +140,7 @@ public class PickerController : MonoBehaviour {
                 picked = Transform.Instantiate(pickedup.getGameObject().transform, new Vector3(-1000, -1000, -1000), pickedup.getGameObject().transform.rotation, transform);
                 if(pickedup.model != null)
                 {
-                    pickedModel = Transform.Instantiate<Transform>(pickedup.model, transform);
+                    pickedModel = Transform.Instantiate<Transform>(pickedup.model, transform.position, pickedup.getGameObject().transform.rotation, transform);
                     pickedModel.gameObject.SetActive(true);
                 }
                 Destroy(pickedup.getGameObject());
